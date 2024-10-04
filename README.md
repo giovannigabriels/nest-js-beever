@@ -69,9 +69,9 @@ You can test the API endpoints using tools like [Postman](https://www.postman.co
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imdpb3Zhbm5pZ2FicmllbDYxOUBnbWFpbC5jb20iLCJpYXQiOjE3MjgwNTcwMTcsImV4cCI6MTcyODE0MzQxN30.Xu4oaMdVSM7A0K0ByraUTRFmvqEs5T9ED7SZsy1sJFM"
   }
 
-#### 3. Access protected API (Kanye quote)
+#### 3. Access protected API
 
-- **Endpoint**: `GET /user/kanye-quote`
+- **Endpoint**: `GET /user/quote`
 
 - **Request Headers**:
   ```bash
