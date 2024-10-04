@@ -84,7 +84,15 @@ export class UserService {
     }
   }
 
-  async getUserQuote(): Promise<GetQuoteResponseDto> {
+  async getUserQuote(user: any): Promise<GetQuoteResponseDto> {
+    const { email } = user
+
+    const findUser = await this.findUserByEmail(email)
+
+    if(!findUser) {
+      throw new UnauthorizedException();
+    }
+
     try {
       const response = await lastValueFrom(this.httpService.get('https://api.kanye.rest/'));
 

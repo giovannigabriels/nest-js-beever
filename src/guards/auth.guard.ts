@@ -16,7 +16,7 @@ import {
       }
   
       const token = this.extractTokenFromHeader(req);
-      
+
       if (!token) {
         throw new UnauthorizedException();
       }
@@ -28,7 +28,6 @@ import {
         });
     
         req.user = verif;
-    
         return true;
         
       } catch (error) {
