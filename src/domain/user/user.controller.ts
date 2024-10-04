@@ -1,5 +1,5 @@
-import { Controller, Post, Body, UseGuards, Get } from '@nestjs/common';
-import { AuthGuard } from '../guards/auth.guard';
+import { Controller, Post, Body, UseGuards, Get, Req } from '@nestjs/common';
+import { AuthGuard } from '../../guards/auth.guard';
 import { AuthCredentialDto } from './dto/auth-credential.dto';
 import { GenerateTokenDto } from './dto/generate-token.dto';
 import { GetQuoteResponseDto } from './dto/quote.dto';
@@ -24,8 +24,8 @@ export class UserController {
 
   @Get('/quote')
   @UseGuards(AuthGuard)
-  async getUserQuote(): Promise<GetQuoteResponseDto> {
-    return await this.userService.getUserQuote()
+  async getUserQuote(@Req() req: Request,): Promise<GetQuoteResponseDto> {
+    return await this.userService.getUserQuote(req['user'])
   }
 
 }
