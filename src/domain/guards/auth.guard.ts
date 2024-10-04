@@ -15,19 +15,32 @@ import {
         throw new UnauthorizedException();
       }
   
-      const token = req.headers.authorization.split(' ')[1];
+      const token = this.extractTokenFromHeader(req);
+      
       if (!token) {
         throw new UnauthorizedException();
       }
   
       const jwtService = new JwtService();
-      const verif = await jwtService.verifyAsync(token, {
-        secret: "rahasia",
-      });
-  
-      req.user = verif;
-  
-      return true;
+      try {
+        const verif = await jwtService.verifyAsync(token, {
+          secret: "rahasia",
+        });
+    
+        req.user = verif;
+    
+        return true;
+        
+      } catch (error) {
+        throw new UnauthorizedException();
+      }
+    }
+
+    private extractTokenFromHeader(request: Request): string | undefined {
+      const [type, token] = request.headers['authorization']?.split(' ') ?? [];
+      return type === 'Bearer' ? token : undefined;
     }
   }
+
+  
   

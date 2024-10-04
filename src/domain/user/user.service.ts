@@ -2,10 +2,14 @@ import { Injectable, BadRequestException, NotFoundException, UnauthorizedExcepti
 import { InjectModel } from '@nestjs/sequelize';
 import { User } from '../../models/user.model';
 import { Bcrypt } from '../../utils/bcrypt';
-import { AuthCredentialDto } from './dto/register.dto';
+import { AuthCredentialDto } from './dto/auth-credential.dto';
 import { JwtService } from '@nestjs/jwt';
 import { HttpService } from '@nestjs/axios';
 import { lastValueFrom } from 'rxjs';
+import { GetQuoteResponseDto } from './dto/quote.dto';
+import { GenerateTokenDto } from './dto/generate-token.dto';
+import { RegisterResponseDto } from './dto/register-response.dto';
+import { TokenPayloadDto } from './dto/token-payload.dto';
 
 
 @Injectable()
@@ -22,7 +26,7 @@ export class UserService {
     return this.userModel.findOne({ where: { email } });
   }
 
-  async register(body: AuthCredentialDto): Promise<any> {
+  async register(body: AuthCredentialDto): Promise<RegisterResponseDto> {
       const { email, password } = body
   
       const findUser = await this.findUserByEmail(email)
@@ -34,14 +38,14 @@ export class UserService {
       const hashedPassword = await this.bcrypt.hashPassword(password);
       const newUser = await this.userModel.create({ email, password: hashedPassword });
 
-      const response: any = {
+      const response: RegisterResponseDto = {
         message: `${newUser?.email} success register`
       }
   
       return response
   }
 
-  async login(body: AuthCredentialDto): Promise<User> {
+  async login(body: AuthCredentialDto): Promise<GenerateTokenDto> {
       const { email, password } = body
   
       const findUser = await this.findUserByEmail(email)
@@ -66,9 +70,9 @@ export class UserService {
 
   async generateToken(payload: {
     email: string
-  }): Promise<any> {
+  }): Promise<GenerateTokenDto> {
 
-    const tokenPayload: any = {
+    const tokenPayload: TokenPayloadDto = {
       email: payload.email
     }
 
@@ -80,7 +84,7 @@ export class UserService {
     }
   }
 
-  async getUserQuote() {
+  async getUserQuote(): Promise<GetQuoteResponseDto> {
     try {
       const response = await lastValueFrom(this.httpService.get('https://api.kanye.rest/'));
 
